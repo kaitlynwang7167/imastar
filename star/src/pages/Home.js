@@ -18,9 +18,8 @@ import { db } from "../firebase-config";
 import background from "../images/Signup1.png";
 import login1 from "../images/login.png";
 import sign1 from "../images/sign.png";
-import next1 from "../images/next.png";
 import previous1 from "../images/previous.png";
-
+import incorrect from "../images/incorrect.png";
 function Home() {
   const [l, setL] = useState(0);
   const [s, setS] = useState(0);
@@ -44,17 +43,15 @@ function Home() {
     setL(0);
     setS(0);
   }
-  function next() {
-    setStep(step + 1);
+  function tryAgain() {
+    setStep(step - 1);
   }
-  const task = [];
   const star = 0;
   const createUser = async () => {
     await setDoc(doc(db, "users", username), {
       username,
     });
     await setDoc(doc(db, "info", username), {
-      task,
       star,
     });
     setStep(2);
@@ -80,7 +77,7 @@ function Home() {
   if (step === 2 && valid === 1) {
     setTimeout(() => {
       navigate(navigateUrl);
-    }, 2000);
+    }, 100);
     return (
       <div
         style={{
@@ -88,32 +85,28 @@ function Home() {
           backgroundSize: "1400px",
           height: "700px",
         }}
-      >
-        Success Redirecting...
-      </div>
+      ></div>
     );
   } else if (step === 2 && valid === 0) {
     return (
       <div
         style={{
-          backgroundImage: `url(${background})`,
+          backgroundImage: `url(${incorrect})`,
           backgroundSize: "1400px",
           height: "700px",
         }}
       >
-        <h3>Incorrect username</h3>
         <Button
           className="inline-button"
           style={{
             background: `url(${previous1})`,
             backgroundSize: "100px",
             left: "650px",
-            top: "450px",
+            top: "500px",
             height: "43px",
             width: "100px",
           }}
-          variant="outlined"
-          onClick={previous}
+          onClick={tryAgain}
         ></Button>
       </div>
     );
@@ -174,19 +167,6 @@ function Home() {
           variant="contained"
           onClick={previous}
         ></Button>
-        {/*<Button
-          className="inline-button utility-button"
-          style={{
-            background: `url(${next1})`,
-            backgroundSize: "100px",
-            left: "375px",
-            top: "500px",
-            height: "43px",
-            width: "100px",
-          }}
-          variant="contained"
-          onClick={next}
-        ></Button>*/}
       </div>
     );
   }
